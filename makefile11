@@ -1,0 +1,22 @@
+TARGET = test 
+MUDUO = /home/jjz/git/muduotest
+LDFLAGS = $(MUDUO)/base/libmuduo_base.a -lpthread /home/jjz/test/ZQCommon/libZQCommon.so#./ZQCommon/libZQCommon.so $(MUDUO)/libmuduo_base.a              #-lpthread -lrt -lhttp_parser
+INCLUDE = -Iinclude -IZQCommon -I$(MUDUO)/base -I$(MUDUO)
+CFLAGS = -g 
+VPATH = src:ZQCommon
+DIRSRC = $(MUDUO)/EventLoop.cpp $(MUDUO)/Channel.cpp $(MUDUO)/Poller.cpp $(MUDUO)/poller/*.cpp
+
+%.o:%.cpp
+	$(CXX) $(INCLUDE) -c -g  $<  -std=c++11 
+
+
+SOURCES = $(wildcard *.cpp $(DIRSRC))
+OBJS = $(patsubst %.cpp,%.o,$(SOURCES))
+$(TARGET):$(OBJS)
+	$(CXX) $(OBJS) -g -o $(TARGET) $(LDFLAGS)
+
+
+
+clean:
+	-rm test
+	-rm *.o
